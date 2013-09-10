@@ -1,0 +1,176 @@
+set nocp bs=2 ts=2 sw=2 et ai si cin hls is ic scs nu sta sc sr ar aw
+
+set ww=<,>,b,s,[,] mouse=a bg=dark fen fdm=marker
+nm <F2> :w<CR>:mak!<CR>
+nm <F3> :!%< < %<.in<CR>
+nm <F4> :!gdb -tui ./%<<CR><CR>
+"hi Normal guibg=black guifg=white
+syn on
+
+set mps+=<:>
+
+set hi=1000
+
+" always use utf-8
+set encoding=utf-8
+
+" don't highlight next search and clear the window
+nnoremap <C-l> :nohlsearch<CR><C-l>
+
+" alt+hjkl for indenting and moving lines
+nnoremap <A-j> :m+<CR>==
+nnoremap <A-k> :m-2<CR>==
+nnoremap <A-h> <<
+nnoremap <A-l> >>
+inoremap <A-j> <Esc>:m+<CR>==gi
+inoremap <A-k> <Esc>:m-2<CR>==gi
+inoremap <A-h> <Esc><<`]a
+inoremap <A-l> <Esc>>>`]a
+vnoremap <A-j> :m'>+<CR>gv=gv
+vnoremap <A-k> :m-2<CR>gv=gv
+vnoremap <A-h> <gv
+vnoremap <A-l> >gv
+
+" disable arrow keys, because that's the right thing to do
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+"nnoremap <left> <nop>
+"nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+
+" left and right arrows to switch buffer
+nnoremap <left> :bp<CR>
+nnoremap <right> :bn<CR>
+
+" Wildmenu
+if has("wildmenu")
+  set wildignore+=*.a,*.o
+  set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png
+  set wildignore+=.DS_Store,.git,.hg,.svn
+  set wildignore+=*~,*.swp,*.tmp
+  set wildmenu
+  set wildmode=longest,list
+endif
+
+" Plugin dependent stuff
+let iCanHazVundle=1
+let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+if !filereadable(vundle_readme)
+  echo "Installing Vundle.."
+  echo ""
+  silent !mkdir -p ~/.vim/bundle
+  silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+  let iCanHazVundle=0
+endif
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle 'gmarik/vundle'
+
+"Bundle 'Syntastic'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-surround'
+Bundle 'majutsushi/tagbar'
+Bundle 'scrooloose/nerdtree'
+Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'scrooloose/syntastic'
+Bundle 'spf13/vim-colors'
+Bundle 'techlivezheng/vim-plugin-minibufexpl'
+Bundle 'vim-scripts/guicolorscheme.vim'
+if iCanHazVundle == 0
+  echo "Installing Bundles, please ignore key map error messages"
+  echo ""
+  :BundleInstall 
+endif
+
+" Mapping for fuzzyfinder
+nmap <c-h> :FufHelp<CR> 
+
+" Mapping for NERDtree
+nmap <F8> :NERDTreeToggle<CR>
+
+" Mapping for TagBar
+nmap <F9> :TagbarToggle<CR>
+
+" Mapping for MiniBufExpl
+nmap <leader>mb :MBEToggle<CR>
+
+" Configuration for Syntastic
+let g:syntastic_python_checkers = ['pyflakes', 'pep8']
+
+"au GUIEnter * simalt ~x "x on an English Windows version. n on a French one
+"set lines=50 columns=180
+
+" cpp indent options
+"set cino=N-s,i2s,(0,u0,w1,Ws,m1
+set cino=N-s,L0,:0,l1,i2s,(0
+
+" python settings
+autocmd BufEnter *.py set et fo=croql sts=4 sw=4
+
+" fugitive settings
+autocmd BufReadPost fugitive://* set bufhidden=delete
+
+
+" statusline
+set laststatus=2
+set statusline=
+set statusline+=%<\                           " cut at start
+set statusline+=%*[%n%H%M%R%W]%*\           " flags and buf no
+set statusline+=%-40f\                        " path
+set statusline+=%{fugitive#statusline()}    " git branch
+set statusline+=%=[%{strlen(&ft)?&ft:'none'}\   " filetype
+set statusline+=%{strlen(&fenc)?&fenc:&enc}]  " encoding
+set statusline+=%10((%l,%c)%)\                " line and column
+set statusline+=%P                            " percentage of file
+
+
+" set font to Consolas on win, inconsolata elsewhere
+if has("gui_running")
+  colo solarized
+  if has("gui_gtk2")
+    set guifont=Inconsolata\ 12
+  elseif has("gui_win32")
+    set guifont=Consolas:h11:cANSI
+  endif
+else
+  colo molokai
+endif
+
+" certi specifics
+command Remote execute "edit scp://remote/~lmp/Projects/"
+
+" Don't indent templates
+function! CppNoNamespaceAndTemplateIndent()
+    let l:cline_num = line('.')
+    let l:cline = getline(l:cline_num)
+    let l:pline_num = prevnonblank(l:cline_num - 1)
+    let l:pline = getline(l:pline_num)
+    while l:pline =~# '\(^\s*{\s*\|^\s*//\|^\s*/\*\|\*/\s*$\)'
+        let l:pline_num = prevnonblank(l:pline_num - 1)
+        let l:pline = getline(l:pline_num)
+    endwhile
+    let l:retv = cindent('.')
+    let l:pindent = indent(l:pline_num)
+    if l:pline =~# '^\s*template\s*\s*$'
+        let l:retv = l:pindent
+    elseif l:pline =~# '\s*typename\s*.*,\s*$'
+        let l:retv = l:pindent
+    elseif l:pline =~# '\s*class\s*.*,\s*$'
+        let l:retv = l:pindent
+    elseif l:cline =~# '^\s*>\s*$'
+        let l:retv = l:pindent - &shiftwidth
+    elseif l:pline =~# '\s*typename\s*.*>\s*$'
+        let l:retv = l:pindent - &shiftwidth
+    elseif l:pline =~# '\s*class\s*.*>\s*$'
+        let l:retv = l:pindent - &shiftwidth
+    endif
+    return l:retv
+endfunction
+
+if has("autocmd")
+    autocmd BufEnter *.{cc,cxx,cpp,h,hh,hpp,hxx} setlocal indentexpr=CppNoNamespaceAndTemplateIndent()
+endif

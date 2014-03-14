@@ -14,6 +14,9 @@ set hi=1000
 " always use utf-8
 set encoding=utf-8
 
+" set leader to ,
+let mapleader = ","
+
 " don't highlight next search and clear the window
 nnoremap <C-l> :nohlsearch<CR><C-l>
 
@@ -80,6 +83,9 @@ Bundle 'scrooloose/syntastic'
 Bundle 'spf13/vim-colors'
 Bundle 'techlivezheng/vim-plugin-minibufexpl'
 Bundle 'vim-scripts/guicolorscheme.vim'
+Bundle 'wincent/Command-T'
+"Bundle 'rmartinho/vim-cpp11'
+
 if iCanHazVundle == 0
   echo "Installing Bundles, please ignore key map error messages"
   echo ""
@@ -140,37 +146,7 @@ else
   colo molokai
 endif
 
-" certi specifics
-command Remote execute "edit scp://remote/~lmp/Projects/"
 
-" Don't indent templates
-function! CppNoNamespaceAndTemplateIndent()
-    let l:cline_num = line('.')
-    let l:cline = getline(l:cline_num)
-    let l:pline_num = prevnonblank(l:cline_num - 1)
-    let l:pline = getline(l:pline_num)
-    while l:pline =~# '\(^\s*{\s*\|^\s*//\|^\s*/\*\|\*/\s*$\)'
-        let l:pline_num = prevnonblank(l:pline_num - 1)
-        let l:pline = getline(l:pline_num)
-    endwhile
-    let l:retv = cindent('.')
-    let l:pindent = indent(l:pline_num)
-    if l:pline =~# '^\s*template\s*\s*$'
-        let l:retv = l:pindent
-    elseif l:pline =~# '\s*typename\s*.*,\s*$'
-        let l:retv = l:pindent
-    elseif l:pline =~# '\s*class\s*.*,\s*$'
-        let l:retv = l:pindent
-    elseif l:cline =~# '^\s*>\s*$'
-        let l:retv = l:pindent - &shiftwidth
-    elseif l:pline =~# '\s*typename\s*.*>\s*$'
-        let l:retv = l:pindent - &shiftwidth
-    elseif l:pline =~# '\s*class\s*.*>\s*$'
-        let l:retv = l:pindent - &shiftwidth
-    endif
-    return l:retv
-endfunction
-
-if has("autocmd")
-    autocmd BufEnter *.{cc,cxx,cpp,h,hh,hpp,hxx} setlocal indentexpr=CppNoNamespaceAndTemplateIndent()
-endif
+" clang-format for c++ files
+map <C-I> :pyf ~/.vim/clang-format-3.4.py<CR>
+imap <C-I> <ESC>:pyf ~/.vim/clang-format-3.4.py<CR>i

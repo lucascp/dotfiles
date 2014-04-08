@@ -72,18 +72,19 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
-"Bundle 'Syntastic'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'majutsushi/tagbar'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'scrooloose/syntastic'
+"Bundle 'scrooloose/syntastic'
 Bundle 'spf13/vim-colors'
-Bundle 'techlivezheng/vim-plugin-minibufexpl'
+"Bundle 'techlivezheng/vim-plugin-minibufexpl'
 Bundle 'vim-scripts/guicolorscheme.vim'
-Bundle 'wincent/Command-T'
+Bundle 'flazz/vim-colorschemes'
+"Bundle 'wincent/Command-T'
+Bundle 'kien/ctrlp.vim'
 "Bundle 'rmartinho/vim-cpp11'
 
 if iCanHazVundle == 0
@@ -104,11 +105,12 @@ nmap <F9> :TagbarToggle<CR>
 " Mapping for MiniBufExpl
 nmap <leader>mb :MBEToggle<CR>
 
+" CtrlP settings
+let g:ctrlp_map = '<leader>t'
+let g:ctrlp_clear_cache_on_exit = 0
+
 " Configuration for Syntastic
 let g:syntastic_python_checkers = ['pyflakes', 'pep8']
-
-"au GUIEnter * simalt ~x "x on an English Windows version. n on a French one
-"set lines=50 columns=180
 
 " cpp indent options
 "set cino=N-s,i2s,(0,u0,w1,Ws,m1
@@ -124,14 +126,14 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 " statusline
 set laststatus=2
 set statusline=
-set statusline+=%<\                           " cut at start
-set statusline+=%*[%n%H%M%R%W]%*\           " flags and buf no
-set statusline+=%-40f\                        " path
-set statusline+=%{fugitive#statusline()}    " git branch
-set statusline+=%=[%{strlen(&ft)?&ft:'none'}\   " filetype
-set statusline+=%{strlen(&fenc)?&fenc:&enc}]  " encoding
-set statusline+=%10((%l,%c)%)\                " line and column
-set statusline+=%P                            " percentage of file
+set statusline+=%<\                            " cut at start
+set statusline+=%*[%n%H%M%R%W]%*\              " flags and buf no
+set statusline+=%-40f\                         " path
+set statusline+=%{fugitive#statusline()}       " git branch
+set statusline+=%=[%{strlen(&ft)?&ft:'none'}\  " filetype
+set statusline+=%{strlen(&fenc)?&fenc:&enc}]   " encoding
+set statusline+=%10((%l,%c)%)\                 " line and column
+set statusline+=%P                             " percentage of file
 
 
 " set font to Consolas on win, inconsolata elsewhere

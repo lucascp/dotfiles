@@ -86,6 +86,8 @@ Bundle 'flazz/vim-colorschemes'
 "Bundle 'wincent/Command-T'
 Bundle 'kien/ctrlp.vim'
 "Bundle 'rmartinho/vim-cpp11'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'rhysd/vim-clang-format'
 
 if iCanHazVundle == 0
   echo "Installing Bundles, please ignore key map error messages"
@@ -108,6 +110,7 @@ nmap <leader>mb :MBEToggle<CR>
 " CtrlP settings
 let g:ctrlp_map = '<leader>t'
 let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files --exclude-standard -co']
 
 " Configuration for Syntastic
 let g:syntastic_python_checkers = ['pyflakes', 'pep8']
@@ -150,5 +153,18 @@ endif
 
 
 " clang-format for c++ files
-map <C-I> :pyf ~/.vim/clang-format-3.4.py<CR>
-imap <C-I> <ESC>:pyf ~/.vim/clang-format-3.4.py<CR>i
+"map <C-I> :pyf ~/.vim/clang-format-3.4.py<CR>
+"imap <C-I> <ESC>:pyf ~/.vim/clang-format-3.4.py<CR>i
+
+let g:clang_format#style_options = {
+  \ "AccessModifierOffset" : -4,
+  \ "AllowShortIfStatementsOnASingleLine" : "true",
+  \ "AlwaysBreakTemplateDeclarations" : "true",
+  \ "Standard" : "C++11"}
+
+let g:clang_format#command = "clang-format-3.5"
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><C-I> :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><C-I> :ClangFormat<CR>
+

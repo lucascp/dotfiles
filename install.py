@@ -7,6 +7,11 @@ dotfiles_dir = os.path.dirname(os.path.realpath(__file__))
 for f in os.listdir(dotfiles_dir):
     if f == os.path.basename(__file__):
         continue
+    root, ext = os.path.splitext(f)
+    if root[0] == '.':
+        continue
+    if ext == '.md':
+        continue
     try:
         os.symlink(os.path.join(dotfiles_dir, f),
                    os.path.join(os.environ['HOME'], '.' + f))

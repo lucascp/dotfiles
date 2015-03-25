@@ -42,6 +42,9 @@ if has("wildmenu")
   set wildmode=longest,list
 endif
 
+" Store swap files in fixed location, not current directory.
+set dir=~/.vimswap//,/var/tmp//,/tmp//,.
+
 " Plugin dependent stuff
 let iCanHazVundle=1
 let vundle_readme=expand('~/.vim/bundle/vundle/README.md')

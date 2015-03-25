@@ -69,6 +69,7 @@ Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'spf13/vim-colors'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'kien/ctrlp.vim'
+Plugin 'FelikZ/ctrlp-py-matcher'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'rhysd/vim-clang-format'
 
@@ -100,6 +101,9 @@ nmap <F9> :TagbarToggle<CR>
 let g:ctrlp_map = '<leader>t'
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files --exclude-standard -co']
+if has('python')
+  let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+endif
 
 " cpp indent options
 set cino=N-s,L0,:0,l1,i2s,(0

@@ -32,6 +32,18 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
+" easier window navigation
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+if has("nvim")
+  tnoremap <A-h> <C-\><C-n><C-w>h
+  tnoremap <A-j> <C-\><C-n><C-w>j
+  tnoremap <A-k> <C-\><C-n><C-w>k
+  tnoremap <A-l> <C-\><C-n><C-w>l
+endif
+
 " Wildmenu
 if has("wildmenu")
   set wildignore+=*.a,*.o
@@ -44,6 +56,12 @@ endif
 
 " Store swap files in fixed location, not current directory.
 set dir=~/.vimswap//,/var/tmp//,/tmp//,.
+
+" Nvim specific
+if has("nvim")
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  let g:terminal_scrollback_buffer_size=20000
+endif
 
 " Plugin dependent stuff
 let iCanHazVundle=1
@@ -70,6 +88,7 @@ Plugin 'spf13/vim-colors'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'FelikZ/ctrlp-py-matcher'
+Plugin 'sheerun/vim-polyglot'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'rhysd/vim-clang-format'
 

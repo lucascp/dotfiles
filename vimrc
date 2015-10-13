@@ -63,72 +63,65 @@ if has("nvim")
   let g:terminal_scrollback_buffer_size=20000
 endif
 
-" Plugin dependent stuff
-let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-if !filereadable(vundle_readme)
-  echo "Installing Vundle.."
-  echo ""
-  silent !mkdir -p ~/.vim/bundle
-  silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-  let iCanHazVundle=0
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-Plugin 'gmarik/vundle'
 
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'majutsushi/tagbar'
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'spf13/vim-colors'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'kien/ctrlp.vim'
-Plugin 'FelikZ/ctrlp-py-matcher'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'rhysd/vim-clang-format'
+call plug#begin('~/.vim/bundle')
 
-if iCanHazVundle == 0
-  echo "Installing Bundles, please ignore key map error messages"
-  echo ""
-  :PluginInstall 
-endif
+Plug 'tpope/vim-fugitive'
+autocmd BufReadPost fugitive://* set bufhidden=delete
+
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+nmap <F8> :NERDTreeToggle<CR>
+
+Plug 'tomasr/molokai'
+"Plug 'spf13/vim-colors'
+"Plug 'flazz/vim-colorschemes'
+
+let g:fzf_install = 'yes | ./install'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': g:fzf_install }
+Plug 'junegunn/fzf.vim'
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+nnoremap <leader><leader> :Files<CR>
+nnoremap <leader><Enter> :Buffers<CR>
+
+Plug 'sheerun/vim-polyglot'
+
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+"let g:clang_library_path = '~/.vim/bundle/YouCompleteMe/third_party/ycmd'
+"let g:clang_use_library=1
+"let g:ycm_extra_conf_globlist = ['~/Projects/*', '~/remote/*', '!~/*']
+
+Plug 'kana/vim-operator-user'
+
+Plug 'rhysd/vim-clang-format', { 'for': 'cpp' }
+let g:clang_format#command = "clang-format-3.8"
+autocmd FileType c,cpp,objc map <buffer><C-I> <Plug>(operator-clang-format)
+
+call plug#end()
+
+colo molokai
 
 " set font to Consolas on win, inconsolata elsewhere
 if has("gui_running")
-  colo solarized
   if has("gui_gtk2")
-    set guifont=Inconsolata\ 12
   elseif has("gui_win32")
     set guifont=Consolas:h11:cANSI
+  else
+    set guifont=Inconsolata\ 12
   endif
-else
-  colo molokai
-endif
-
-" Mapping for NERDtree
-nmap <F8> :NERDTreeToggle<CR>
-
-" Mapping for TagBar
-nmap <F9> :TagbarToggle<CR>
-
-" CtrlP settings
-let g:ctrlp_map = '<leader>t'
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files --exclude-standard -co']
-if has('python')
-  let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 endif
 
 " cpp indent options
 set cino=N-s,L0,:0,l1,i2s,(0
-
-" fugitive settings
-autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " statusline
 set laststatus=2
@@ -141,10 +134,4 @@ set statusline+=%=[%{strlen(&ft)?&ft:'none'}\  " filetype
 set statusline+=%{strlen(&fenc)?&fenc:&enc}]   " encoding
 set statusline+=%10((%l,%c)%)\                 " line and column
 set statusline+=%P                             " percentage of file
-
-let g:clang_format#command = "clang-format-3.5"
-
-" map to <C-I> in C++ code
-autocmd FileType c,cpp,objc nnoremap <buffer> <C-I> :ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <buffer> <C-I> :ClangFormat<CR>
 

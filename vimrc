@@ -55,7 +55,8 @@ if has("wildmenu")
 endif
 
 " Store swap files in fixed location, not current directory.
-set dir=~/.vimswap//,/var/tmp//,/tmp//,.
+set directory=~/.vimswap//,/var/tmp//,/tmp//,.
+set backupdir=~/.local/share/nvim/swap
 
 " Nvim specific
 if has("nvim")
@@ -76,9 +77,13 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 nmap <F8> :NERDTreeToggle<CR>
+
+Plug 'majutsushi/tagbar'
+nmap <F9> :TagbarToggle<CR>
 
 Plug 'tomasr/molokai'
 "Plug 'spf13/vim-colors'
@@ -106,6 +111,12 @@ Plug 'rhysd/vim-clang-format', { 'for': 'cpp' }
 let g:clang_format#command = "clang-format-3.8"
 autocmd FileType c,cpp,objc map <buffer><C-I> <Plug>(operator-clang-format)
 
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_powerline_fonts=1
+
+Plug 'airblade/vim-gitgutter'
+
 call plug#end()
 
 colo molokai
@@ -122,16 +133,3 @@ endif
 
 " cpp indent options
 set cino=N-s,L0,:0,l1,i2s,(0
-
-" statusline
-set laststatus=2
-set statusline=
-set statusline+=%<\                            " cut at start
-set statusline+=%*[%n%H%M%R%W]%*\              " flags and buf no
-set statusline+=%-40f\                         " path
-set statusline+=%{fugitive#statusline()}       " git branch
-set statusline+=%=[%{strlen(&ft)?&ft:'none'}\  " filetype
-set statusline+=%{strlen(&fenc)?&fenc:&enc}]   " encoding
-set statusline+=%10((%l,%c)%)\                 " line and column
-set statusline+=%P                             " percentage of file
-

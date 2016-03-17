@@ -79,8 +79,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 nmap <F8> :NERDTreeToggle<CR>
+nmap <leader>t :NERDTreeFind<CR>
 
 Plug 'majutsushi/tagbar'
 nmap <F9> :TagbarToggle<CR>

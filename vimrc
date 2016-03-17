@@ -108,7 +108,7 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'kana/vim-operator-user'
 
-Plug 'rhysd/vim-clang-format', { 'for': 'cpp' }
+Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp'] }
 let g:clang_format#command = "clang-format-3.8"
 autocmd FileType c,cpp,objc map <buffer><C-I> <Plug>(operator-clang-format)
 

@@ -7,7 +7,7 @@
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-HISTCONTROL=ignoreboth,erasedups
+HISTCONTROL=ignoreboth:erasedups
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -77,8 +77,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-# try to fix skype's default browser
-export BROWSER=chromium-browser
+export BROWSER=firefox
 
 #fix colors
 if [ -n "$DISPLAY" -a "$TERM" == "xterm" ]; then

@@ -99,6 +99,10 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 nnoremap <leader><leader> :Files<CR>
 nnoremap <leader><Enter> :Buffers<CR>
 
+Plug 'junegunn/vim-easy-align'
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
+
 Plug 'sheerun/vim-polyglot'
 
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }

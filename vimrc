@@ -2,10 +2,7 @@ set nocp bs=2 ts=2 sw=2 et ai si cin hls is ic scs nu sta sc sr ar aw
 
 set ww=<,>,b,s,[,] mouse=a bg=dark fen fdm=marker
 set completeopt=menu,menuone
-nm <F2> :w<CR>:mak!<CR>
-nm <F3> :!%< < %<.in<CR>
-nm <F4> :!gdb -tui ./%<<CR><CR>
-"hi Normal guibg=black guifg=white
+
 syn on
 filetype plugin on
 
@@ -13,8 +10,9 @@ set mps+=<:>
 
 set hi=1000
 
-" always use utf-8
-set encoding=utf-8
+if !has('nvim') && has('vim_starting')
+  set encoding=utf-8
+endif
 
 " set leader to ,
 let mapleader = ","
@@ -76,51 +74,55 @@ Plug 'tpope/vim-fugitive'
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-characterize'
+
+Plug 'tmhedberg/matchit'
 
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>t :NERDTreeFind<CR>
 
-Plug 'majutsushi/tagbar'
-nmap <F9> :TagbarToggle<CR>
-
 Plug 'tomasr/molokai'
-"Plug 'spf13/vim-colors'
-"Plug 'flazz/vim-colorschemes'
 
 let g:fzf_install = 'yes | ./install'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': g:fzf_install }
 Plug 'junegunn/fzf.vim'
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-l> <plug>(fzf-complete-line)
 nnoremap <leader><leader> :Files<CR>
 nnoremap <leader><Enter> :Buffers<CR>
+nnoremap <leader>w :Windows<CR>
+nnoremap <leader>c :BCommits<CR>
+nnoremap <leader>r :Rg 
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
 
 Plug 'junegunn/vim-easy-align'
-nmap ga <Plug>(EasyAlign)
-xmap ga <Plug>(EasyAlign)
+nmap <leader>a <Plug>(EasyAlign)
+xmap <leader>a <Plug>(EasyAlign)
 
 Plug 'sheerun/vim-polyglot'
 
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-"let g:clang_library_path = '~/.vim/bundle/YouCompleteMe/third_party/ycmd'
-"let g:clang_use_library=1
-"let g:ycm_extra_conf_globlist = ['~/Projects/*', '~/remote/*', '!~/*']
+Plug 'pangloss/vim-javascript'
 
 Plug 'kana/vim-operator-user'
-
-Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp'] }
-let g:clang_format#command = "clang-format-3.8"
-autocmd FileType c,cpp,objc map <buffer><C-I> <Plug>(operator-clang-format)
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts=1
 
 Plug 'airblade/vim-gitgutter'
+
+Plug 'w0rp/ale'
+
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" let g:deoplete#enable_at_startup = 1
 
 call plug#end()
 

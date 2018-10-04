@@ -97,7 +97,7 @@ nnoremap <leader>c :BCommits<CR>
 nnoremap <leader>r :Rg 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   'rg --line-number --no-heading --hidden --color=always '.shellescape(<q-args>), 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
@@ -120,6 +120,7 @@ let g:airline_powerline_fonts=1
 Plug 'airblade/vim-gitgutter'
 
 Plug 'w0rp/ale'
+let g:ale_linters = {'javascript': ['eslint']}
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " let g:deoplete#enable_at_startup = 1

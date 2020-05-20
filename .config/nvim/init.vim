@@ -113,11 +113,15 @@ let g:airline_powerline_fonts=1
 
 Plug 'airblade/vim-gitgutter'
 
-Plug 'w0rp/ale'
-let g:ale_linters = {'javascript': ['eslint']}
-
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" let g:deoplete#enable_at_startup = 1
+Plug 'dense-analysis/ale'
+let g:ale_completion_enabled = 1
+let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
+\}
+let g:ale_sign_error = '•'
+let g:ale_sign_warning = '•'
 
 call plug#end()
 

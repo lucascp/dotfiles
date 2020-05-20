@@ -127,15 +127,5 @@ call plug#end()
 
 colo molokai
 
-" set font to Consolas on win, inconsolata elsewhere
-if has("gui_running")
-  if has("gui_gtk2")
-  elseif has("gui_win32")
-    set guifont=Consolas:h11:cANSI
-  else
-    set guifont=Inconsolata\ 12
-  endif
-endif
-
 " cpp indent options
 set cino=N-s,L0,:0,l1,i2s,(0

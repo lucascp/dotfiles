@@ -78,6 +78,7 @@ Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-abolish'
 
 Plug 'tmhedberg/matchit'
 
@@ -86,6 +87,7 @@ nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>t :NERDTreeFind<CR>
 
 Plug 'tomasr/molokai'
+Plug 'haishanh/night-owl.vim'
 
 let g:fzf_install = 'yes | ./install'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': g:fzf_install }
@@ -94,7 +96,7 @@ nnoremap <leader><leader> :Files<CR>
 nnoremap <leader><Enter> :Buffers<CR>
 nnoremap <leader>w :Windows<CR>
 nnoremap <leader>c :BCommits<CR>
-nnoremap <leader>r :Rg
+nnoremap <leader>r :Rg<space>
 
 
 Plug 'junegunn/vim-easy-align'
@@ -125,7 +127,7 @@ let g:ale_sign_warning = '•'
 
 call plug#end()
 
-colo molokai
+colo night-owl
 
 " cpp indent options
 set cino=N-s,L0,:0,l1,i2s,(0

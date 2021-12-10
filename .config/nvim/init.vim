@@ -1,7 +1,11 @@
 set nocp bs=2 ts=2 sw=2 et ai si cin hls is ic scs nu sta sc sr ar aw
 
 set ww=<,>,b,s,[,] mouse=a bg=dark fen fdm=marker
-set completeopt=menu,menuone
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+set scrollback=20000
+set noshowmode
+set termguicolors
 
 syn on
 filetype plugin on
@@ -10,17 +14,13 @@ set mps+=<:>
 
 set hi=1000
 
-if !has('nvim') && has('vim_starting')
-  set encoding=utf-8
-endif
-
 " set leader to ,
 let mapleader = ","
 
 " don't highlight next search and clear the window
 nnoremap <C-l> :nohlsearch<CR><C-l>
 
-" disable arrow keys, because that's the right thing to do
+" disable arrow keys
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -35,12 +35,10 @@ nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
-if has("nvim")
-  tnoremap <A-h> <C-\><C-n><C-w>h
-  tnoremap <A-j> <C-\><C-n><C-w>j
-  tnoremap <A-k> <C-\><C-n><C-w>k
-  tnoremap <A-l> <C-\><C-n><C-w>l
-endif
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-l> <C-\><C-n><C-w>l
 
 " Wildmenu
 if has("wildmenu")
@@ -56,12 +54,6 @@ endif
 set directory=~/.vimswap//,/var/tmp//,/tmp//,.
 set backupdir=~/.local/share/nvim/swap
 
-" Nvim specific
-if has("nvim")
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  let g:terminal_scrollback_buffer_size=20000
-endif
-
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -74,23 +66,34 @@ Plug 'tpope/vim-fugitive'
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-ragtag'
-Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-abolish'
+Plug 'andymass/vim-matchup'
+Plug 'sheerun/vim-polyglot'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'justinmk/vim-sneak'
+Plug 'airblade/vim-rooter'
+Plug 'machakann/vim-highlightedyank'
 
-Plug 'tmhedberg/matchit'
+Plug 'airblade/vim-gitgutter'
+Plug 'itchyny/lightline.vim'
+let g:lightline = {
+      \ 'colorscheme': 'nightowl',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
+Plug 'haishanh/night-owl.vim'
 
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>t :NERDTreeFind<CR>
 
-Plug 'tomasr/molokai'
-Plug 'haishanh/night-owl.vim'
-
-let g:fzf_install = 'yes | ./install'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': g:fzf_install }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 nnoremap <leader><leader> :Files<CR>
 nnoremap <leader><Enter> :Buffers<CR>
@@ -98,36 +101,66 @@ nnoremap <leader>w :Windows<CR>
 nnoremap <leader>c :BCommits<CR>
 nnoremap <leader>r :Rg<space>
 
-
 Plug 'junegunn/vim-easy-align'
 nmap <leader>a <Plug>(EasyAlign)
 xmap <leader>a <Plug>(EasyAlign)
 
-Plug 'sheerun/vim-polyglot'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/lsp_extensions.nvim'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'ray-x/lsp_signature.nvim'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
 
-Plug 'pangloss/vim-javascript'
+Plug 'simrat39/rust-tools.nvim'
 
-Plug 'kana/vim-operator-user'
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-let g:airline_powerline_fonts=1
-
-Plug 'airblade/vim-gitgutter'
-
-Plug 'dense-analysis/ale'
-let g:ale_completion_enabled = 1
-let g:ale_fix_on_save = 1
-let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'javascript': ['eslint'],
-\}
-let g:ale_sign_error = '•'
-let g:ale_sign_warning = '•'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 call plug#end()
 
 colo night-owl
 
-" cpp indent options
-set cino=N-s,L0,:0,l1,i2s,(0
+" Rust
+let g:rustfmt_autosave = 1
+lua << EOF
+require('rust-tools').setup({})
+EOF
+
+lua <<EOF
+local cmp = require'cmp'
+cmp.setup({
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
+
+  -- Installed sources
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+})
+EOF
